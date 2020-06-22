@@ -1,0 +1,17 @@
+title 0.6 New_Note_Spa
+
+user->browser: click on the save button
+
+note over browser:
+browser starts executing callback
+code for submit button
+which updates page tree adding note
+and then post change to server 
+end note
+
+browser->browser: redrawNotes()
+browser->browser: sendToServer(note)
+
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->browser: [{"message":"note created"}]
