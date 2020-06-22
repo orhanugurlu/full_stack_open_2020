@@ -1,2 +1,2 @@
-# full_stack_open_2020
+# Full Stack Open 2020 Solutions
 My solutions for Full Stack Open 2020 course
