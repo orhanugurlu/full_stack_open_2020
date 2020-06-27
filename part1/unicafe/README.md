@@ -1,1 +1,1 @@
-Solution for exercises 1.6-1.11 
+Solution for exercises 1.6-1.11: unicafe application.
