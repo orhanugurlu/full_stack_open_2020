@@ -9,7 +9,11 @@ const PersonForm = ({ persons, setPersons }) => {
       if (persons.some(e => e.name === newName)) {
         alert('{newName} is already added to phonebook')
       } else {
-        setPersons(persons.concat({name : newName, number : newNumber}))
+        setPersons(persons.concat(
+          { id     : persons.length + 1,
+            name   : newName,
+            number : newNumber }
+        ))
         setNewName('')
         setNewNumber('')
       }
