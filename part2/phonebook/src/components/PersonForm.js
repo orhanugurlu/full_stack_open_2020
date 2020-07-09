@@ -1,10 +1,20 @@
 import React, { useState } from 'react'
 import personService from '../services/persons'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setMessage }) => {
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber ] = useState('')
-  
+
+    const updatePersons = (persons, message) => {
+      setPersons(persons)
+      setNewName('')
+      setNewNumber('')
+      setMessage({text:message, class:'info'})
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)      
+    }
+
     const addEntry = (event) => {
       event.preventDefault()
       if (persons.some(e => e.name === newName)) {
@@ -13,9 +23,8 @@ const PersonForm = ({ persons, setPersons }) => {
           personToUpdate.number = newNumber
           personService.update(personToUpdate)
             .then(updatedPerson => {
-              setPersons(persons.filter(e => e.name !== newName).concat(updatedPerson))
-              setNewName('')
-              setNewNumber('')
+              updatePersons(persons.filter(e => e.name !== newName).concat(updatedPerson),
+                            `Updated '${updatedPerson.name}'`)
             })
         }
       } else {
@@ -27,9 +36,8 @@ const PersonForm = ({ persons, setPersons }) => {
 
         personService.create(newPerson)
           .then(createdPerson => {
-            setPersons(persons.concat(createdPerson))
-            setNewName('')
-            setNewNumber('')
+            updatePersons(persons.concat(createdPerson),
+                        `Added '${createdPerson.name}'`)
            })
       }
     }
