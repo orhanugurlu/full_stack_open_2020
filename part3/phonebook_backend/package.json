@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd ../../part2/phonebook && npm run build --prod && cp -r build ../../part3/phonebook_backend/",
+    "deploy": "bash deploy.sh",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",        
+    "logs:prod": "heroku logs --tail",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Orhan Ugurlu",
