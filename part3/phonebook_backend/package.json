@@ -1,0 +1,21 @@
+{
+  "name": "phonebook_backend",
+  "version": "0.0.1",
+  "description": "Full Stack Open 2020 course Phone Book exercise backend server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Orhan Ugurlu",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
