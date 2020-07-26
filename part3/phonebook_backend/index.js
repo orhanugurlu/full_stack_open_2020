@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Phonebook backend server</h1><p>Use /api/persons for REST interface</p>')
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
     Person.countDocuments({})
         .then(count => {
             res.send(`<p>Phonebook has info for ${count} people.</p><p>${new Date()}</p>`)
@@ -36,10 +36,12 @@ app.get('/info', (req, res) => {
         .catch(error => next(error))
 })
 
-app.get('/api/persons', (req, res) => {
-    Person.find({}).then(persons => {
-        res.json(persons)
-    })
+app.get('/api/persons', (req, res, next) => {
+    Person.find({})
+        .then(persons => {
+            res.json(persons)
+        })
+        .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -62,7 +64,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
 
     if (!body.name || !body.number) {
@@ -76,10 +78,11 @@ app.post('/api/persons', (req, res) => {
         number: body.number,
     })
 
-    person.save().then(savedPerson => {
-        res.json(savedPerson)
-    })
-
+    person.save()
+        .then(savedPerson => {
+            res.json(savedPerson)
+        })
+        .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -90,7 +93,7 @@ app.put('/api/persons/:id', (req, res, next) => {
         number: body.number,
     }
 
-    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    Person.findByIdAndUpdate(req.params.id, person, { runValidators: true, new: true, context: 'query' })
         .then(updatedPerson => {
             res.json(updatedPerson)
         })
@@ -98,7 +101,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 const unknownEndpoint = (req, res) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+    res.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndpoint)
 
@@ -107,6 +110,8 @@ const errorHandler = (error, req, res, next) => {
 
     if (error.name === 'CastError') {
         return res.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message })
     }
 
     next(error)
