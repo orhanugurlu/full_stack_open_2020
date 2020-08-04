@@ -23,7 +23,7 @@ app.use(express.json())
 app.use(express.static('build'))
 app.use(middleware.morgenLogger)
 
-app.use('/', bloglistRouter)
+app.use('/api/blogs', bloglistRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
