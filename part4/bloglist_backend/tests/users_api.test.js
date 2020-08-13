@@ -2,9 +2,14 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const helper = require('./test_helper')
 const supertest = require('supertest')
+const config = require('../utils/config')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
+
+beforeAll(async () => {
+  await mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+})
 
 const testFail = async (user, errorExpected) => {
   const usersAtStart = await helper.usersInDb()
@@ -26,8 +31,8 @@ describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('mySecret', 10)
-    const user = new User({ username: 'root', passwordHash })
+    const passwordHash = await bcrypt.hash(helper.existingUser.password, 10)
+    const user = new User({ username: helper.existingUser.username, passwordHash: passwordHash })
 
     await user.save()
   })
@@ -35,15 +40,9 @@ describe('when there is initially one user in db', () => {
   test('creation succeeds for a new username', async () => {
     const usersAtStart = await helper.usersInDb()
 
-    const newUser = {
-      username: 'orhanugurlu',
-      name: 'Orhan Ugurlu',
-      password: 'fullstack2020',
-    }
-
     await api
       .post('/api/users')
-      .send(newUser)
+      .send(helper.testUser)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -51,12 +50,12 @@ describe('when there is initially one user in db', () => {
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
     const usernames = usersAtEnd.map(u => u.username)
-    expect(usernames).toContain(newUser.username)
+    expect(usernames).toContain(helper.testUser.username)
   })
 
   test('creation fails with proper statuscode and message if username already exists', async () => {
     const newUser = {
-      username: 'root',
+      username: helper.existingUser.username,
       name: 'Superuser',
       password: 'superuser',
     }
@@ -64,15 +63,9 @@ describe('when there is initially one user in db', () => {
   })
 
   test('after creation, all users are retrieved properly', async () => {
-    const newUser = {
-      username: 'orhanugurlu',
-      name: 'Orhan Ugurlu',
-      password: 'fullstack2020',
-    }
-
     await api
       .post('/api/users')
-      .send(newUser)
+      .send(helper.testUser)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -81,8 +74,8 @@ describe('when there is initially one user in db', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    expect(response.body.map((user => user.username))).toContainEqual('root')
-    expect(response.body.map((user => user.username))).toContainEqual('orhanugurlu')
+    expect(response.body.map((user => user.username))).toContainEqual(helper.existingUser.username)
+    expect(response.body.map((user => user.username))).toContainEqual(helper.testUser.username)
   })
 
 })
@@ -127,9 +120,8 @@ describe('when there is no user in db', () => {
     await testFail(newUser, 'password should be at least 3 characters long')
   })
 
-
 })
 
-afterAll(() => {
-  mongoose.connection.close()
+afterAll(async () => {
+  await mongoose.connection.close()
 })

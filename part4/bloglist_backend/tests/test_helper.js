@@ -62,8 +62,21 @@ const blogsInDbWithoutId = async () => {
   return blogs.map(blog => {
     let blogForJson = blog.toJSON()
     delete blogForJson.id
+    blogForJson.user = blogForJson.user.toString()
     return blogForJson
   })
+}
+
+const existingUser = {
+  username: 'root',
+  name: 'root',
+  password: 'root',
+}
+
+const testUser = {
+  username: 'orhanugurlu',
+  name: 'Orhan Ugurlu',
+  password: 'fullstack2020',
 }
 
 const usersInDb = async () => {
@@ -72,5 +85,5 @@ const usersInDb = async () => {
 }
 
 module.exports = {
-  testBlogs, blogsInDb, blogsInDbWithoutId, usersInDb
+  testBlogs, blogsInDb, blogsInDbWithoutId, existingUser, testUser, usersInDb
 }
