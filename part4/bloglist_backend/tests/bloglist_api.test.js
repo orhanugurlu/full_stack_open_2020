@@ -199,6 +199,10 @@ describe('deletion of a new blog', () => {
 
     const titles = blogsInDb.map(n => n.title)
     expect(titles).not.toContain(helper.testBlogs[0].title)
+
+    const users = await helper.usersInDb()
+    const testUser = users.find(u => u.username === helper.testUser.username)
+    expect(testUser.blogs.map(id => id.toString())).not.toContain(helper.testBlogs[0]._id)
   })
 
   test('Blog cannot be deleted if not logged in', async () => {
@@ -232,21 +236,6 @@ describe('update of blog', () => {
 
     const updatedBlogInDb = blogsInDb.find(blog => blog.id === helper.testBlogs[0]._id)
     expect(updatedBlogInDb.likes).toBe(1001)
-  })
-
-  test('Blog cannot be updated if not logged in', async () => {
-    const updatedBlog = { ...helper.testBlogs[0] }
-    delete updatedBlog._id
-    delete updatedBlog.__v
-    updatedBlog.likes = 1001
-
-    const response = await api
-      .put(`/api/blogs/${helper.testBlogs[0]._id}`)
-      .send(updatedBlog)
-      .expect(401)
-      .expect('Content-Type', /application\/json/)
-
-    expect(response.body.error).toBe('invalid token')
   })
 
 })

@@ -20,7 +20,8 @@ bloglistRouter.post('/', async (request, response) => {
 
   const blog = new Blog(request.body)
   blog.user = user.toJSON().id.toString()
-  const result = await blog.save()
+  let result = await blog.save()
+  await result.populate('user', { username: 1, name: 1, id: 1 }).execPopulate()
 
   user.blogs = user.blogs.concat(blog.toJSON().id.toString())
   await user.save()
@@ -41,8 +42,7 @@ bloglistRouter.delete('/:id', async (request, response) => {
   const user = await User.findById(decodedToken.id)
   if (blog.user.toString() === user.toJSON().id.toString()) {
     await Blog.findOneAndRemove(request.params.id)
-    user.blogs = user.blogs.filter(id => id !== request.params.id)
-    await user.save()
+    await User.updateOne({ _id: decodedToken.id }, { $pullAll: { blogs: [request.params.id] } })
     response.status(204).end()
   } else {
     response.status(401).json({ error: 'only allowed to delete own blogs' })
@@ -50,33 +50,24 @@ bloglistRouter.delete('/:id', async (request, response) => {
 })
 
 bloglistRouter.put('/:id', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, config.SECRET)
-  if (!request.token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
   const blog = await Blog.findById(request.params.id)
   if (!blog) {
     return response.status(404).json({ error: 'blog not found' })
   }
-  const user = await User.findById(decodedToken.id)
-  if (blog.user.toString() === user.id.toString()) {
-    const body = request.body
 
-    const blog = {
-      title: body.title,
-      author: body.author,
-      url: body.url,
-      likes: body.likes,
-    }
-
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      request.params.id, blog, { runValidators: true, new: true, context: 'query' }
-    )
-    response.json(updatedBlog)
-  } else {
-    response.status(401).json({ error: 'only allowed to update own blogs' })
+  const body = request.body
+  const blogModified = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
   }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id, blogModified, { runValidators: true, new: true, context: 'query' }
+  ).populate('user', { username: 1, name: 1, id: 1 })
+
+  response.json(updatedBlog)
 })
 
 module.exports = bloglistRouter
