@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = ({ blogs, setBlogs, setMessage }) => {
+const BlogForm = ({ blogs, setBlogs, setMessage, toggleRef }) => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
@@ -24,9 +24,6 @@ const BlogForm = ({ blogs, setBlogs, setMessage }) => {
     setNewAuthor('')
     setNewUrl('')
     setMessage({ text: message, class: 'info' })
-    setTimeout(() => {
-      setMessage(null)
-    }, 3000)
   }
 
   const addBlog = (event) => {
@@ -40,7 +37,8 @@ const BlogForm = ({ blogs, setBlogs, setMessage }) => {
     blogService.create(newBlog)
       .then(createdBlog => {
         updateBlogs(blogs.concat(createdBlog),
-          `A new blog '${createdBlog.title}' by '${createdBlog.author}' added`)
+          `A new blog '${createdBlog.title}' by '${createdBlog.author}' added`);
+        toggleRef.current.toggleVisibility()
       })
       .catch(error => {
         setMessage({ text: `${error.response.data.error}`, class: 'error' })

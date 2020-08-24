@@ -16,9 +16,6 @@ const Login = ({ user, setUser, setMessage }) => {
       setPassword('')
     } catch (exception) {
       setMessage({ text: 'Wrong credentials!', class: 'error' })
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
     }
   }
 
