@@ -37,7 +37,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, toggleRef }) => {
     blogService.create(newBlog)
       .then(createdBlog => {
         updateBlogs(blogs.concat(createdBlog),
-          `A new blog '${createdBlog.title}' by '${createdBlog.author}' added`);
+          `A new blog '${createdBlog.title}' by '${createdBlog.author}' added`)
         toggleRef.current.toggleVisibility()
       })
       .catch(error => {

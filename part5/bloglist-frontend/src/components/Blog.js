@@ -35,7 +35,7 @@ const Blog = ({ blog, blogs, setBlogs, setMessage, user }) => {
     const blogToDelete = blogs.find(b => b.id === id)
     if (window.confirm(`Delete '${blogToDelete.title}' by '${blogToDelete.author}'?`)) {
       blogService
-        .deleteIt(id).then(response => {
+        .deleteIt(id).then(() => {
           setMessage({ text: `Deleted '${blogToDelete.title}' by '${blogToDelete.author}'`, class: 'info' })
           setBlogs(blogs.filter(p => p.id !== id).sort((a, b) => b.likes - a.likes))
         })
@@ -48,8 +48,8 @@ const Blog = ({ blog, blogs, setBlogs, setMessage, user }) => {
   return (
     <div className='blog'>
       <div>
-        '{blog.title}' by '{blog.author}'
-          <button style={hideWhenVisible} onClick={toggleVisibility}>View</button>
+        &apos;{blog.title}&apos; by &apos;{blog.author}&apos;
+        <button style={hideWhenVisible} onClick={toggleVisibility}>View</button>
         <button style={showWhenVisible} onClick={toggleVisibility}>Hide</button>
       </div>
       <div style={showWhenVisible}>Address: {blog.url}</div>

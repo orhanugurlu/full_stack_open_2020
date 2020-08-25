@@ -19,7 +19,7 @@ const Login = ({ user, setUser, setMessage }) => {
     }
   }
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     setUser(null)
   }
 
