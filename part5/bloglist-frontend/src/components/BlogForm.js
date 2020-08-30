@@ -36,9 +36,9 @@ const BlogForm = ({ blogs, setBlogs, setMessage, toggleRef }) => {
 
     blogService.create(newBlog)
       .then(createdBlog => {
+        toggleRef.current.toggleVisibility()
         updateBlogs(blogs.concat(createdBlog),
           `A new blog '${createdBlog.title}' by '${createdBlog.author}' added`)
-        toggleRef.current.toggleVisibility()
       })
       .catch(error => {
         setMessage({ text: `${error.response.data.error}`, class: 'error' })
@@ -49,16 +49,16 @@ const BlogForm = ({ blogs, setBlogs, setMessage, toggleRef }) => {
     <form onSubmit={addBlog}>
       <h2>Create Blog</h2>
       <div>
-        Title: <input value={newTitle} onChange={handleTitleChange} />
+        Title: <input id="title" value={newTitle} onChange={handleTitleChange} />
       </div>
       <div>
-        Author: <input value={newAuthor} onChange={handleAuthorChange} />
+        Author: <input id="author" value={newAuthor} onChange={handleAuthorChange} />
       </div>
       <div>
-        URL: <input value={newUrl} onChange={handleUrlChange} />
+        URL: <input id="url" value={newUrl} onChange={handleUrlChange} />
       </div>
       <div>
-        <button type="submit">Create</button>
+        <button id="createbutton" type="submit">Create</button>
       </div>
     </form>)
 }

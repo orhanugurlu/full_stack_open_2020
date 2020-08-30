@@ -27,7 +27,7 @@ const Login = ({ user, setUser, setMessage }) => {
     return (
       <div>
         <h2>Login to application</h2>
-        <form onSubmit={handleLogin}>
+        <form id="loginform" onSubmit={handleLogin}>
           <div>
             Username
             <input
@@ -46,14 +46,14 @@ const Login = ({ user, setUser, setMessage }) => {
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit">Login</button>
+          <button id='loginbutton' type="submit">Login</button>
         </form>
       </div>)
   }
 
   const renderLoggedUser = () => {
     return (
-      <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
+      <p>{user.name} logged in <button id='logoutbutton' onClick={handleLogout}>Logout</button></p>
     )
   }
 
