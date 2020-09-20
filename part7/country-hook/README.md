@@ -1,2 +1,2 @@
 # Countries Application - Hook Version
-Solution for the Part 7.7 exercises.
+Solution for the Part 7.7 exercise.
