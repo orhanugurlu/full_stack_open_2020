@@ -1,0 +1,43 @@
+h1 {
+  color: green;
+}
+h2 {
+  color: green;
+  font-style: italic;  
+}
+.blog {
+  padding: 10px 2px 5px 2px;
+  border: solid 1px black;
+  margin-bottom: 5px;
+}
+.blog div:nth-child(n+2):nth-child(-n+4) {
+  margin-left: 20px;
+}
+.blog div button {
+  margin-left: 10px;
+}
+form > div {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+form > div > input {
+  margin-left: 10px;
+}
+.info {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
