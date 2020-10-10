@@ -1,62 +1,91 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
+import Home from './components/Home'
 import Blogs from './components/Blogs'
-import Notification from './components/Notification'
-import Login from './components/Login'
-import blogService from './services/blogs'
+import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
-import Togglable from './components/Toggleable'
-
-const LOGGED_IN_USER_KEY = 'loggedInUser'
+import Users from './components/Users'
+import User from './components/User'
+import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
+import LoggedUser from './components/LoggedUser'
+import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/userReducer'
+import { initializeLoggedUser } from './reducers/loggedUserReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useRouteMatch,
+} from 'react-router-dom'
 
 const App = () => {
-  const [message, setMessage] = useState(null)
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const blogFormToggleRef = useRef()
-
-  const setBlogsSorted = (newBlogs) => {
-    setBlogs(newBlogs.sort((a, b) => b.likes - a.likes))
-  }
-
-  const setMsg = (msg) => {
-    setMessage(msg)
-    setTimeout(() => {
-      setMessage(null)
-    }, 3000)
-  }
+  const dispatch = useDispatch()
+  const loggedUser = useSelector(state => state.loggedUser)
+  const blogs = useSelector(state => state.blogs)
+  const users = useSelector(state => state.users)
 
   useEffect(() => {
-    const loggedInUserJSON = window.localStorage.getItem(LOGGED_IN_USER_KEY)
-    if (loggedInUserJSON) {
-      const loggedInUser = JSON.parse(loggedInUserJSON)
-      setUser(loggedInUser)
-    }
-    blogService.getAll().then(blogs =>
-      setBlogsSorted(blogs)
-    )
-  }, [])
+    dispatch(initializeBlogs())
+    dispatch(initializeUsers())
+    dispatch(initializeLoggedUser())
+  }, [dispatch])
 
-  useEffect(() => {
-    if (user) {
-      blogService.setToken(user.token)
-      window.localStorage.setItem(LOGGED_IN_USER_KEY, JSON.stringify(user))
-    } else {
-      blogService.setToken('')
-      window.localStorage.removeItem(LOGGED_IN_USER_KEY)
-    }
-  }, [user])
+  const blogIdMatch = useRouteMatch('/blogs/:id')
+  const requestedBlog = blogIdMatch
+    ? blogs.find(blog => blog.id === blogIdMatch.params.id)
+    : null
+
+  const userIdMatch = useRouteMatch('/users/:id')
+  const requestedUser = userIdMatch
+    ? users.find(user => user.id === userIdMatch.params.id)
+    : null
+
+  const padding = {
+    padding: 5
+  }
 
   return (
     <div>
+      <div>
+        <Link to="/" style={padding}>Home</Link>
+        <Link to="/blogs" style={padding}>Blogs</Link>
+        <Link to="/users" style={padding}>Users</Link>
+        {loggedUser !== null
+          ? <LoggedUser />
+          : <Link to="/login" style={padding}>Login</Link>
+        }
+      </div>
+      <Notification />
       <h1>Blog List Application</h1>
-      <Notification message={message} />
-      <Login user={user} setUser={setUser} setMessage={setMsg} />
-      {user !== null &&
-        <Togglable buttonLabel='New Blog' ref={blogFormToggleRef}>
-          <BlogForm blogs={blogs} setBlogs={setBlogsSorted} setMessage={setMsg} toggleRef={blogFormToggleRef} />
-        </Togglable>
-      }
-      <Blogs blogs={blogs} setBlogs={setBlogsSorted} setMessage={setMsg} user={user} />
+      <Switch>
+        <Route path="/blogs/:id">
+          <Blog blog={requestedBlog} />
+        </Route>
+        <Route path="/createBlog">
+          <BlogForm />
+        </Route>
+        <Route path="/blogs">
+          <Blogs />
+        </Route>
+        <Route path="/users/:id">
+          <User user={requestedUser} />
+        </Route>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/login">
+          {loggedUser ? <Redirect to="/" /> : <LoginForm />}
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+      <div>
+        <br />
+        FullStack 2020 Exercise application by Orhan Ugurlu
+      </div>
     </div>
   )
 }
