@@ -1,16 +1,13 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { updateBlog } from '../reducers/blogReducer'
 
-const AddCommentForm = ({ blog }) => {
-  const dispatch = useDispatch()
+const AddCommentForm = ({ blog, handleUpdateBlog }) => {
 
   const handleAddComment = (event, blogToUpdate) => {
     event.preventDefault()
-    dispatch(updateBlog({
+    handleUpdateBlog({
       ...blogToUpdate,
       comments: [...blogToUpdate.comments, event.target.comment.value]
-    }))
+    })
   }
 
   return (

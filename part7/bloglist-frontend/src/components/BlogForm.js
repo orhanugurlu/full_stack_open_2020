@@ -1,11 +1,6 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = () => {
-  const dispatch = useDispatch()
-  const history = useHistory()
+const BlogForm = ({ doCreateBlog, doCancelCreateBlog }) => {
 
   const handleAddBlog = (event) => {
     event.preventDefault()
@@ -14,11 +9,7 @@ const BlogForm = () => {
       author: event.target.author.value,
       url: event.target.url.value
     }
-    dispatch(createBlog(newBlog, history))
-  }
-
-  const handleCancel = () => {
-    history.push('/blogs')
+    doCreateBlog(newBlog)
   }
 
   return (
@@ -35,7 +26,7 @@ const BlogForm = () => {
       </div>
       <div>
         <button id="createbutton" type="submit">Create</button>
-        <button id="cancelbutton" onClick={handleCancel}>Cancel</button>
+        <button id="cancelbutton" type="button" onClick={doCancelCreateBlog}>Cancel</button>
       </div>
     </form>)
 }

@@ -1,19 +1,16 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { login } from '../reducers/loggedUserReducer'
 
-const LoginForm = () => {
-  const dispatch = useDispatch()
+const LoginForm = ({ handleLogin }) => {
 
-  const handleLogin = (event) => {
+  const doLogin = (event) => {
     event.preventDefault()
-    dispatch(login(event.target.username.value, event.target.password.value))
+    handleLogin(event.target.username.value, event.target.password.value)
   }
 
   return (
     <div>
       <h2>Login to application</h2>
-      <form id="loginform" onSubmit={handleLogin}>
+      <form id="loginform" onSubmit={doLogin}>
         <div>
           Username
           <input

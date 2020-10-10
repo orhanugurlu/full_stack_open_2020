@@ -1,15 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-const Blogs = () => {
-  const blogs = useSelector(state => state.blogs)
-  const loggedUser = useSelector(state => state.loggedUser)
-  const history = useHistory()
-
-  const handleCreate = () => {
-    history.push('/createBlog')
-  }
+const Blogs = ({ blogs, loggedUser, handleCreate }) => {
 
   return (
     <div>
