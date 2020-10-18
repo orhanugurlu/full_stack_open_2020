@@ -1,0 +1,15 @@
+{
+  "name": "library-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "library-backend.js",
+  "scripts": {
+    "start": "node library-backend.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.18.2",
+    "graphql": "^15.3.0"
+  }
+}
