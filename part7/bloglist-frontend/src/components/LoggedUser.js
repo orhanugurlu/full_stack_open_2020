@@ -1,8 +1,9 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
 const LoggedUser = ({ user, handleLogout }) => {
   return (
-    <p>{user.name} logged in <button id='logoutbutton' onClick={handleLogout}>Logout</button></p>
+    <>{user.name} logged in <Button id='logoutbutton' onClick={handleLogout}>Logout</Button></>
   )
 }
 

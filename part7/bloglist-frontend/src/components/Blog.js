@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, ListGroup, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import AddCommentForm from './AddCommentForm'
 
@@ -16,24 +17,37 @@ const Blog = ({ blog, loggedUser, handleUpdate, handleDelete }) => {
   }
 
   return (
-    <div className='blog'>
-      <div className='blogHeader'>
-        &apos;{blog.title}&apos; by &apos;{blog.author}&apos;
-      </div>
-      <div className='blogAddress'>Address: {blog.url}</div>
-      <div className='blogLikes'>Likes: {blog.likes} <button className="likebutton" onClick={() => doLike(blog)}>Like</button></div>
-      <div className='blogOwner'>Owner: <Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link></div>
+    <div className="content">
+      <h2>
+        Blog: &apos;{blog.title}&apos; by &apos;{blog.author}&apos;
+      </h2>
+      <Table>
+        <tbody>
+          <tr>
+            <td>Address</td>
+            <td>{blog.url}</td>
+          </tr>
+          <tr>
+            <td>Likes</td>
+            <td>{blog.likes} <Button className="likebutton" onClick={() => doLike(blog)}>Like</Button></td>
+          </tr>
+          <tr>
+            <td>Owner</td>
+            <td><Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link></td>
+          </tr>
+        </tbody>
+      </Table>
       {loggedUser !== null && loggedUser.name === blog.user.name &&
-        <div><button className="deletebutton" onClick={() => doDelete(blog)}>Delete</button></div>
+        <div><Button className="deletebutton" onClick={() => doDelete(blog)}>Delete</Button></div>
       }
-      <div className='commentsHeader'>Comments</div>
+      <h3>Comments</h3>
       <AddCommentForm blog={blog} handleUpdateBlog={handleUpdate} />
       <div className='comments'>
-        <ul>
+        <ListGroup>
           {blog.comments.map((comment, index) =>
-            <li key={index}>{comment}</li>
+            <ListGroup.Item key={index}>{comment}</ListGroup.Item>
           )}
-        </ul>
+        </ListGroup>
       </div>
     </div>
   )

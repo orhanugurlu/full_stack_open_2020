@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap'
 
 const AddCommentForm = ({ blog, handleUpdateBlog }) => {
 
@@ -11,11 +12,19 @@ const AddCommentForm = ({ blog, handleUpdateBlog }) => {
   }
 
   return (
-    <form onSubmit={e => handleAddComment(e, blog)}>
-      <div>
-        <input name="comment" /> <button id="addcommentbutton" type="submit">Add Comment</button>
-      </div>
-    </form>)
+    <Form onSubmit={e => handleAddComment(e, blog)}>
+      <InputGroup className="mb-3">
+        <FormControl
+          placeholder="Comment text"
+          aria-label="Comment text"
+          aria-describedby="basic-addon2"
+          name="comment"
+        />
+        <InputGroup.Append>
+          <Button type="submit" variant="outline-secondary">Add</Button>
+        </InputGroup.Append>
+      </InputGroup>
+    </Form>)
 }
 
 export default AddCommentForm

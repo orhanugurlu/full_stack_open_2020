@@ -1,15 +1,21 @@
 import React from 'react'
+import { Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const Users = ({ users }) => {
   return (
-    <div>
+    <div className="content">
       <h2>Users</h2>
-      {users.map(user =>
-        <div key={user.id}>
-          <Link to={`/users/${user.id}`}>{user.name}</Link> blogs: {user.blogs.length}
-        </div>
-      )}
+      <Table striped>
+        <tbody>
+          {users.map(user =>
+            <tr key={user.id}>
+              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
+              <td>Blogs: {user.blogs.length}</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }

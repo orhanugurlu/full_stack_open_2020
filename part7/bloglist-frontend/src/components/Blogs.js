@@ -1,17 +1,24 @@
 import React from 'react'
+import { Button, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const Blogs = ({ blogs, loggedUser, handleCreate }) => {
 
   return (
-    <div>
+    <div className="content">
       <h2>Blogs</h2>
-      {loggedUser && <button id='createBlog' onClick={handleCreate}>Create new</button>}
-      {blogs.map(blog =>
-        <div key={blog.id}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        </div>
-      )}
+      {loggedUser && <Button id='createBlog' onClick={handleCreate}>Create new</Button>}
+      <Table striped>
+        <tbody>
+          {blogs.map(blog =>
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }

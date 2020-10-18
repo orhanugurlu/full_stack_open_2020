@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   Switch,
   Route,
-  Link,
   Redirect,
   useRouteMatch,
   useHistory
@@ -16,7 +15,7 @@ import Users from './components/Users'
 import User from './components/User'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
-import LoggedUser from './components/LoggedUser'
+import NavigationBar from './components/NavigationBar'
 import { login, logout } from './reducers/loggedUserReducer'
 import {
   initializeBlogs,
@@ -51,16 +50,16 @@ const App = () => {
     ? users.find(user => user.id === userIdMatch.params.id)
     : null
 
-  const padding = {
-    padding: 5
-  }
-
   const handleAddBlog = (newBlog) => {
     dispatch(createBlog(newBlog, history))
   }
 
-  const handleCancelAddBlog = () => {
+  const goToBlogs = () => {
     history.push('/blogs')
+  }
+
+  const cancelForm = () => {
+    history.goBack()
   }
 
   const handleCreate = () => {
@@ -84,16 +83,8 @@ const App = () => {
   }
 
   return (
-    <div>
-      <div>
-        <Link to="/" style={padding}>Home</Link>
-        <Link to="/blogs" style={padding}>Blogs</Link>
-        <Link to="/users" style={padding}>Users</Link>
-        {loggedUser !== null
-          ? <LoggedUser user={loggedUser} handleLogout={handleLogout} />
-          : <Link to="/login" style={padding}>Login</Link>
-        }
-      </div>
+    <div className="container">
+      <NavigationBar loggedUser={loggedUser} handleLogout={handleLogout} />
       <Notification message={message} />
       <h1>Blog List Application</h1>
       <Switch>
@@ -104,7 +95,7 @@ const App = () => {
             handleDelete={handleDelete} />
         </Route>
         <Route path="/createBlog">
-          <BlogForm doCreateBlog={handleAddBlog} doCancelCreateBlog={handleCancelAddBlog} />
+          <BlogForm doCreateBlog={handleAddBlog} doCancelCreateBlog={cancelForm} />
         </Route>
         <Route path="/blogs">
           <Blogs blogs={blogs} loggedUser={loggedUser} handleCreate={handleCreate} />
@@ -116,16 +107,12 @@ const App = () => {
           <Users users={users} />
         </Route>
         <Route path="/login">
-          {loggedUser ? <Redirect to="/" /> : <LoginForm handleLogin={handleLogin} />}
+          {loggedUser ? <Redirect to="/" /> : <LoginForm handleLogin={handleLogin} handleCancel={cancelForm} />}
         </Route>
         <Route path="/">
-          <Home />
+          <Home handleGoToBlogs={goToBlogs} />
         </Route>
       </Switch>
-      <div>
-        <br />
-        FullStack 2020 Exercise application by Orhan Ugurlu
-      </div>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const User = ({ user }) => {
@@ -6,18 +7,16 @@ const User = ({ user }) => {
     return null
   }
   return (
-    <div className='user'>
-      <div>
-        <strong>{user.name}</strong>
-      </div>
-      <div>
-        Blogs
-      </div>
-      <ul>
-        {user.blogs.map(blog =>
-          <li key={blog.id}><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></li>
-        )}
-      </ul>
+    <div className="content">
+      <h2>User: {user.name}</h2>
+      <h3>Blogs</h3>
+      <Table striped>
+        <tbody>
+          {user.blogs.map(blog =>
+            <tr key={blog.id}><td><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></td></tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }

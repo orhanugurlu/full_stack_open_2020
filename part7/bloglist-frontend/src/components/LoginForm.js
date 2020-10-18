@@ -1,6 +1,7 @@
 import React from 'react'
+import { Button, Form, FormGroup } from 'react-bootstrap'
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = ({ handleLogin, handleCancel }) => {
 
   const doLogin = (event) => {
     event.preventDefault()
@@ -8,25 +9,18 @@ const LoginForm = ({ handleLogin }) => {
   }
 
   return (
-    <div>
+    <div className="content">
       <h2>Login to application</h2>
-      <form id="loginform" onSubmit={doLogin}>
-        <div>
-          Username
-          <input
-            type="text"
-            name="username"
-          />
-        </div>
-        <div>
-          Password
-          <input
-            type="password"
-            name="password"
-          />
-        </div>
-        <button id='loginbutton' type="submit">Login</button>
-      </form>
+      <Form id="loginform" onSubmit={doLogin}>
+        <FormGroup>
+          <Form.Label>Username</Form.Label>
+          <Form.Control type="text" name="username" />
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" name="password" />
+          <Button variant="primary" type="submit">Login</Button>
+          <Button variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
+        </FormGroup>
+      </Form>
     </div>
   )
 }

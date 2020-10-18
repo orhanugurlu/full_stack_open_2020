@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Form, FormGroup } from 'react-bootstrap'
 
 const BlogForm = ({ doCreateBlog, doCancelCreateBlog }) => {
 
@@ -13,22 +14,21 @@ const BlogForm = ({ doCreateBlog, doCancelCreateBlog }) => {
   }
 
   return (
-    <form onSubmit={handleAddBlog}>
+    <div className="content">
       <h2>Create Blog</h2>
-      <div>
-        Title: <input name="title" />
-      </div>
-      <div>
-        Author: <input name="author" />
-      </div>
-      <div>
-        URL: <input name="url" />
-      </div>
-      <div>
-        <button id="createbutton" type="submit">Create</button>
-        <button id="cancelbutton" type="button" onClick={doCancelCreateBlog}>Cancel</button>
-      </div>
-    </form>)
+      <Form onSubmit={handleAddBlog}>
+        <FormGroup>
+          <Form.Label>Title</Form.Label>
+          <Form.Control type="text" name="title" />
+          <Form.Label>Author</Form.Label>
+          <Form.Control type="text" name="author" />
+          <Form.Label>URL</Form.Label>
+          <Form.Control type="text" name="url" />
+          <Button variant="primary" type="submit">Create</Button>
+          <Button variant="secondary" type="button" onClick={doCancelCreateBlog}>Cancel</Button>
+        </FormGroup>
+      </Form>
+    </div>)
 }
 
 export default BlogForm
