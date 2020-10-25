@@ -7,7 +7,7 @@ const AddCommentForm = ({ blog, handleUpdateBlog }) => {
     event.preventDefault()
     handleUpdateBlog({
       ...blogToUpdate,
-      comments: [...blogToUpdate.comments, event.target.comment.value]
+      comments: [...blogToUpdate.comments, event.target.elements['comment'].value]
     })
   }
 
