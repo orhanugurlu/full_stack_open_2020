@@ -93,6 +93,7 @@ describe('addition of a new blog', () => {
       author: 'Orhan Ugurlu',
       url: 'https://github.com/',
       likes: 1,
+      comments: []
     }
 
     await api
@@ -236,6 +237,27 @@ describe('update of blog', () => {
 
     const updatedBlogInDb = blogsInDb.find(blog => blog.id === helper.testBlogs[0]._id)
     expect(updatedBlogInDb.likes).toBe(1001)
+  })
+  test('Comment can be added to Blog', async () => {
+    let myToken = await loginWithTestUser()
+
+    const updatedBlog = { ...helper.testBlogs[0] }
+    delete updatedBlog._id
+    delete updatedBlog.__v
+    updatedBlog.comments = ['new comment']
+
+    await api
+      .put(`/api/blogs/${helper.testBlogs[0]._id}`)
+      .send(updatedBlog)
+      .set('Authorization', `bearer ${myToken}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsInDb = await helper.blogsInDb()
+    expect(blogsInDb).toHaveLength(helper.testBlogs.length)
+
+    const updatedBlogInDb = blogsInDb.find(blog => blog.id === helper.testBlogs[0]._id)
+    expect(updatedBlogInDb.comments).toStrictEqual(['new comment'])
   })
 
 })
