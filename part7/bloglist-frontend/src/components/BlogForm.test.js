@@ -1,16 +1,11 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
-import { createMemoryHistory } from 'history'
-import { Router } from 'react-router-dom'
 import BlogForm from './BlogForm'
 
 test('renders content', () => {
-  const history = createMemoryHistory()
   const component = render(
-    <Router history={history}>
-      <BlogForm />
-    </Router>
+    <BlogForm />
   )
 
   const contentDiv = component.container.querySelector('.content')
@@ -35,11 +30,8 @@ test('renders content', () => {
 test('cancel button calls doCancelCreateBlog', () => {
   const doCancelCreateBlog = jest.fn()
 
-  const history = createMemoryHistory()
   const component = render(
-    <Router history={history}>
-      <BlogForm doCancelCreateBlog={doCancelCreateBlog} />
-    </Router>
+    <BlogForm doCancelCreateBlog={doCancelCreateBlog} />
   )
 
   const cancelButton = component.queryByText('Cancel', { selector: 'button' })
@@ -53,11 +45,8 @@ test('create button calls doCreateBlog with values entered to form', () => {
   const author = 'Test Author'
   const url = 'Test URL'
 
-  const history = createMemoryHistory()
   const component = render(
-    <Router history={history}>
-      <BlogForm doCreateBlog={doCreateBlog} />
-    </Router>
+    <BlogForm doCreateBlog={doCreateBlog} />
   )
 
   const titleInput = component.queryByLabelText('Title')

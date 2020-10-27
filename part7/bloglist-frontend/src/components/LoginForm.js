@@ -5,7 +5,7 @@ const LoginForm = ({ handleLogin, handleCancel }) => {
 
   const doLogin = (event) => {
     event.preventDefault()
-    handleLogin(event.target.username.value, event.target.password.value)
+    handleLogin(event.target.elements['username'].value, event.target.elements['password'].value)
   }
 
   return (
@@ -13,10 +13,10 @@ const LoginForm = ({ handleLogin, handleCancel }) => {
       <h2>Login to application</h2>
       <Form id="loginform" onSubmit={doLogin}>
         <FormGroup>
-          <Form.Label>Username</Form.Label>
-          <Form.Control type="text" name="username" />
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" name="password" />
+          <Form.Label htmlFor="username">Username</Form.Label>
+          <Form.Control type="text" name="username" id="username" />
+          <Form.Label htmlFor="password">Password</Form.Label>
+          <Form.Control type="password" name="password" id="password" />
           <Button variant="primary" type="submit">Login</Button>
           <Button variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
         </FormGroup>
