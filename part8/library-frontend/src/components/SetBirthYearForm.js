@@ -15,9 +15,7 @@ const SetBirthYearForm = ({ authors, setError }) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
     changeBirthYear({ variables: { name, born } })
-
     setBorn('')
   }
 
