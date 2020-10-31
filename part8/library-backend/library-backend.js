@@ -68,6 +68,9 @@ const typeDefs = gql`
       username: String!
       favoriteGenre: String!
     ): User
+    editUser(
+      setFavoriteGenreTo: String
+    ): User
     login(
       username: String!
       password: String!
@@ -84,7 +87,7 @@ const resolvers = {
       if (args.genre) {
         filter['genres'] = { $in: [args.genre] }
       }
-      const books = await Book.find(filter)
+      const books = await Book.find(filter).populate('author')
       return books
     },
     allAuthors: () => Author.find(),
@@ -151,6 +154,28 @@ const resolvers = {
       }
 
       return author
+    },
+    editUser: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new AuthenticationError("Not authenticated")
+      }
+
+      const user = await User.findOne({ username: currentUser.username })
+      if (!user) {
+        return null
+      }
+
+      user.favoriteGenre = args.setFavoriteGenreTo
+      try {
+        await user.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+
+      return user
     },
     createUser: (root, args) => {
       const user = new User({

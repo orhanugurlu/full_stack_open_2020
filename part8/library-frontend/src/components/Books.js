@@ -1,42 +1,78 @@
-import React from 'react'
-import { useQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
+import { useApolloClient, useLazyQuery, useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
+import Genres from './Genres'
 
-const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
+const Books = ({ show, genreToShow }) => {
+  const [genre, setGenre] = useState(null)
+  const [getAllBooks, result] = useLazyQuery(ALL_BOOKS)
+  const allBooksResult = useQuery(ALL_BOOKS)
+  const client = useApolloClient()
 
-  if (!props.show) {
+  useEffect(() => {
+    setGenre(genreToShow);
+  }, [genreToShow]);
+
+  useEffect(() => {
+    if (genre) {
+      getAllBooks({ variables: { genre: genre } })
+    } else {
+      getAllBooks()
+    }
+  }, [genre]) // eslint-disable-line 
+
+  const setNewGenre = (newGenre) => {
+    client.cache.evict({ fieldName: 'allBooks', args: { genre: genre } })
+    setGenre(newGenre)
+  }
+
+  if (!show) {
     return null
   }
 
-  if (result.loading) {
-    return <div>loading...</div>
+  if (result.loading || allBooksResult.loading) {
+    return <div>Loading...</div>
   }
 
   return (
     <div>
-      <h2>books</h2>
-
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>
-              author
-            </th>
-            <th>
-              published
-            </th>
-          </tr>
-          {result.data.allBooks.map(a =>
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
+      {genreToShow
+        ? <h2>Recommendations</h2>
+        : <h2>Books</h2>
+      }
+      {genreToShow
+        ? <h3>Books in your favorite genre '{genreToShow}'</h3>
+        : (genre ? <h3>In genre '{genre}'</h3> : <h3>All genres</h3>)
+      }
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                Title
+              </th>
+              <th>
+                Author
+              </th>
+              <th>
+                Published Year
+              </th>
+              <th>
+                Genres
+              </th>
             </tr>
-          )}
-        </tbody>
-      </table>
+            {result.data.allBooks.map(b =>
+              <tr key={b.id}>
+                <td>{b.title}</td>
+                <td>{b.author.name}</td>
+                <td>{b.published}</td>
+                <td>{b.genres.join(', ')}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      {genreToShow ? null : <Genres setGenre={setNewGenre} />}
     </div>
   )
 }

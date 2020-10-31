@@ -11,21 +11,23 @@ const Authors = ({ show, setError }) => {
   }
 
   if (result.loading) {
-    return <div>loading...</div>
+    return <div>Loading...</div>
   }
 
   return (
     <div>
-      <h2>authors</h2>
+      <h2>Authors</h2>
       <table>
         <tbody>
           <tr>
-            <th></th>
             <th>
-              born
+              Name
             </th>
             <th>
-              books
+              Birth Year
+            </th>
+            <th>
+              Books
             </th>
           </tr>
           {result.data.allAuthors.map(a =>
