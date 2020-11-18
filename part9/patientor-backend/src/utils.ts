@@ -46,7 +46,8 @@ const toNewPatient = (object: any): NewPatient => {
     dateOfBirth: parseDate(object, 'dateOfBirth'),
     ssn: parseStringField(object, 'ssn'),
     gender: parseGender(object, 'gender'),
-    occupation: parseStringField(object, 'occupation')
+    occupation: parseStringField(object, 'occupation'),
+    entries: []
   };
 
   return newPatient;
