@@ -1,18 +1,18 @@
 import { State } from "./state";
-import { Patient, PatientWithEntries } from "../types";
+import { Patient, PublicPatient } from "../types";
 
 export type Action =
   | {
     type: "SET_PATIENT_LIST";
-    payload: Patient[];
+    payload: PublicPatient[];
   }
   | {
     type: "SET_PATIENT";
-    payload: PatientWithEntries;
+    payload: Patient;
   }
   | {
     type: "ADD_PATIENT";
-    payload: Patient;
+    payload: PublicPatient;
   };
 
 export const reducer = (state: State, action: Action): State => {
@@ -46,21 +46,21 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const setPatientList = (patients: Patient[]): Action => {
+export const setPatientList = (patients: PublicPatient[]): Action => {
   return {
     type: 'SET_PATIENT_LIST',
     payload: patients
   };
 };
 
-export const setCurrentPatient = (patient: PatientWithEntries): Action => {
+export const setCurrentPatient = (patient: Patient): Action => {
   return {
     type: 'SET_PATIENT',
     payload: patient
   };
 };
 
-export const addPatient = (patient: Patient): Action => {
+export const addPatient = (patient: PublicPatient): Action => {
   return {
     type: 'ADD_PATIENT',
     payload: patient

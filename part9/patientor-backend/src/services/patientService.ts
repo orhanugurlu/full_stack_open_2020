@@ -1,10 +1,10 @@
-import patientData from '../../data/patients.json';
+import patientData from '../../data/patients';
 import { Patient, PublicPatient, NewPatient } from '../types';
 import { v4 as uuid } from 'uuid';
 import toNewPatient from '../utils';
 
 let patients: Array<Patient> = patientData.map(obj => {
-  return { id: obj.id, ...toNewPatient(obj) };
+  return { id: obj.id, ...toNewPatient(obj), entries: obj.entries };
 });
 
 const getAllPatientsWithoutSsn = (): PublicPatient[] => {

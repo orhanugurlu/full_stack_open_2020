@@ -4,7 +4,7 @@ import { Container, Table, Button } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
-import { Patient, PatientWithEntries } from "../types";
+import { Patient, PublicPatient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
 import { addPatient, setCurrentPatient, useStateValue } from "../state";
@@ -26,7 +26,7 @@ const PatientListPage: React.FC = () => {
 
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
-      const { data: newPatient } = await axios.post<Patient>(
+      const { data: newPatient } = await axios.post<PublicPatient>(
         `${apiBaseUrl}/patients`,
         values
       );
@@ -41,7 +41,7 @@ const PatientListPage: React.FC = () => {
   const showPatient = async (id: string) => {
     if (!patient || patient.id !== id) {
       try {
-        const { data: patientWithEntriesFromApi } = await axios.get<PatientWithEntries>(
+        const { data: patientWithEntriesFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
         dispatch(setCurrentPatient(patientWithEntriesFromApi));
@@ -68,7 +68,7 @@ const PatientListPage: React.FC = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.values(patients).map((patient: Patient) => (
+          {Object.values(patients).map((patient: PublicPatient) => (
             <Table.Row key={patient.id} onClick={() => showPatient(patient.id)}>
               <Table.Cell>{patient.name}</Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
