@@ -2,11 +2,7 @@ import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { Gender } from '../types';
 
-type GenderIconProps = {
-  gender: Gender;
-};
-
-const GenderIcon = ({ gender }: GenderIconProps) => {
+const GenderIcon: React.FC<{ gender: Gender }> = ({ gender }) => {
   switch (gender) {
     case Gender.Female:
       return <Icon name="venus" />;

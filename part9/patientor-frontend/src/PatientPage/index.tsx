@@ -1,4 +1,5 @@
 import React from "react";
+import EntryDetails from "../components/EntryDetails";
 import GenderIcon from "../components/GenderIcon";
 import { useStateValue } from "../state";
 import { Entry } from "../types";
@@ -18,18 +19,7 @@ const PatientPage: React.FC = () => {
       <h2>entries</h2>
       {patient.entries.length > 0 ?
         patient.entries.map((entry: Entry) => (
-          <div key={entry.id}>
-            {entry.date} <i>{entry.description}</i>
-            {entry.diagnosisCodes ?
-              <ul>
-                {entry.diagnosisCodes.map((code: string) => (
-                  <li key={code}>{code}</li>
-                ))}
-              </ul>
-              :
-              null
-            }
-          </div>
+          <EntryDetails key={entry.id} entry={entry} />
         ))
         :
         <div>No entries</div>
