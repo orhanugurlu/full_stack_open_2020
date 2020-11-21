@@ -3,7 +3,7 @@ import axios from "axios";
 import { Container, Table, Button } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
-import AddPatientModal from "../AddPatientModal";
+import { AddPatientModal } from "../AddPatientModal";
 import { Patient, PublicPatient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
@@ -34,7 +34,7 @@ const PatientListPage: React.FC = () => {
       closeModal();
     } catch (e) {
       console.error(e.response.data);
-      setError(e.response.data.error);
+      setError(e.response.data);
     }
   };
 
@@ -47,7 +47,7 @@ const PatientListPage: React.FC = () => {
         dispatch(setCurrentPatient(patientWithEntriesFromApi));
       } catch (e) {
         console.error(e.response.data);
-        setError(e.response.data.error);
+        setError(e.response.data);
       }
     }
     history.push(`/patients/${id}`);

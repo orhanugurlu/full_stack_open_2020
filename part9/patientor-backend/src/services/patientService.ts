@@ -1,7 +1,7 @@
 import patientData from '../../data/patients';
-import { Patient, PublicPatient, NewPatient } from '../types';
+import { Patient, PublicPatient, NewPatient, Entry } from '../types';
 import { v4 as uuid } from 'uuid';
-import toNewPatient from '../utils';
+import { toNewPatient } from '../utils';
 
 let patients: Array<Patient> = patientData.map(obj => {
   return { id: obj.id, ...toNewPatient(obj), entries: obj.entries };
@@ -27,8 +27,15 @@ const addPatient = (newPatient: NewPatient): Patient => {
   return patient;
 };
 
+const addEntry = (patient: Patient, newEntry: Entry): Patient => {
+  newEntry.id = uuid();
+  patient.entries = patient.entries.concat(newEntry);
+  return patient;
+};
+
 export default {
   getAllPatientsWithoutSsn,
   getPatientById,
-  addPatient
+  addPatient,
+  addEntry
 };

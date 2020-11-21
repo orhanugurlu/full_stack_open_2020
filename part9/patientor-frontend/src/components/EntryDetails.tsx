@@ -11,9 +11,9 @@ const HospitalEntryDetails: React.FC<{ entry: HospitalEntry }> = ({ entry }) => 
   return (
     <Segment>
       <EntryHeader entry={entry} iconName="hospital" />
-      <DiagnoseList list={entry.diagnosisCodes} />
       {entry.sickLeave ? <SickLeaveDetail sickLeave={entry.sickLeave} /> : null}
       {entry.discharge ? <DischargeDetail discharge={entry.discharge} /> : null}
+      <DiagnoseList list={entry.diagnosisCodes} />
     </Segment>
   );
 };
@@ -22,9 +22,9 @@ const OccupationalHealthcareEntryDetails: React.FC<{ entry: OccupationalHealthca
   return (
     <Segment>
       <EntryHeader entry={entry} iconName="stethoscope" />
-      <DiagnoseList list={entry.diagnosisCodes} />
       <Container><strong>Employer: </strong>{entry.employerName}</Container>
       {entry.sickLeave ? <SickLeaveDetail sickLeave={entry.sickLeave} /> : null}
+      <DiagnoseList list={entry.diagnosisCodes} />
     </Segment>
   );
 };
@@ -33,8 +33,8 @@ const HealthCheckEntryDetails: React.FC<{ entry: HealthCheckEntry }> = ({ entry 
   return (
     <Segment>
       <EntryHeader entry={entry} iconName="doctor" />
-      <DiagnoseList list={entry.diagnosisCodes} />
       <HealthCheckRatingIcon rating={entry.healthCheckRating} />
+      <DiagnoseList list={entry.diagnosisCodes} />
     </Segment>
   );
 };

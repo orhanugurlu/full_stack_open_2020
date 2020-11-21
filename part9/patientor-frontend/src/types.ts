@@ -57,6 +57,19 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+export type EntryTypes = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
+
+export const entryTypeToName = (type: EntryTypes): string => {
+  switch (type) {
+    case 'HealthCheck':
+      return 'health check';
+    case 'Hospital':
+      return 'hospital';
+    case 'OccupationalHealthcare':
+      return 'occupational healthcare';
+  }
+};
+
 export interface Patient {
   id: string;
   name: string;
